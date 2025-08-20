@@ -14,7 +14,433 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      comments: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          likes_count: number | null
+          parent_comment_id: string | null
+          post_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          likes_count?: number | null
+          parent_comment_id?: string | null
+          post_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          likes_count?: number | null
+          parent_comment_id?: string | null
+          post_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_parent_comment_id_fkey"
+            columns: ["parent_comment_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      follows: {
+        Row: {
+          created_at: string
+          follower_id: string
+          following_pet_id: string | null
+          following_user_id: string | null
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          follower_id: string
+          following_pet_id?: string | null
+          following_user_id?: string | null
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          follower_id?: string
+          following_pet_id?: string | null
+          following_user_id?: string | null
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "follows_follower_id_fkey"
+            columns: ["follower_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "follows_following_pet_id_fkey"
+            columns: ["following_pet_id"]
+            isOneToOne: false
+            referencedRelation: "pets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "follows_following_user_id_fkey"
+            columns: ["following_user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      likes: {
+        Row: {
+          created_at: string
+          id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "likes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "likes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pets: {
+        Row: {
+          bio: string | null
+          birth_date: string | null
+          breed: string | null
+          color: string | null
+          created_at: string
+          followers_count: number | null
+          gender: Database["public"]["Enums"]["gender"] | null
+          id: string
+          is_active: boolean | null
+          name: string
+          owner_id: string
+          pet_type: Database["public"]["Enums"]["pet_type"]
+          posts_count: number | null
+          profile_image_url: string | null
+          updated_at: string
+          weight: number | null
+        }
+        Insert: {
+          bio?: string | null
+          birth_date?: string | null
+          breed?: string | null
+          color?: string | null
+          created_at?: string
+          followers_count?: number | null
+          gender?: Database["public"]["Enums"]["gender"] | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          owner_id: string
+          pet_type: Database["public"]["Enums"]["pet_type"]
+          posts_count?: number | null
+          profile_image_url?: string | null
+          updated_at?: string
+          weight?: number | null
+        }
+        Update: {
+          bio?: string | null
+          birth_date?: string | null
+          breed?: string | null
+          color?: string | null
+          created_at?: string
+          followers_count?: number | null
+          gender?: Database["public"]["Enums"]["gender"] | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          owner_id?: string
+          pet_type?: Database["public"]["Enums"]["pet_type"]
+          posts_count?: number | null
+          profile_image_url?: string | null
+          updated_at?: string
+          weight?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pets_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      posts: {
+        Row: {
+          comments_count: number | null
+          content: string | null
+          created_at: string
+          expires_at: string | null
+          id: string
+          image_urls: string[] | null
+          is_archived: boolean | null
+          is_sponsored: boolean | null
+          likes_count: number | null
+          location_lat: number | null
+          location_lng: number | null
+          location_name: string | null
+          pet_id: string | null
+          post_type: Database["public"]["Enums"]["post_type"]
+          shares_count: number | null
+          sponsor_budget: number | null
+          target_breeds: string[] | null
+          target_pet_types: Database["public"]["Enums"]["pet_type"][] | null
+          target_radius_km: number | null
+          updated_at: string
+          user_id: string
+          video_url: string | null
+          views_count: number | null
+        }
+        Insert: {
+          comments_count?: number | null
+          content?: string | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          image_urls?: string[] | null
+          is_archived?: boolean | null
+          is_sponsored?: boolean | null
+          likes_count?: number | null
+          location_lat?: number | null
+          location_lng?: number | null
+          location_name?: string | null
+          pet_id?: string | null
+          post_type?: Database["public"]["Enums"]["post_type"]
+          shares_count?: number | null
+          sponsor_budget?: number | null
+          target_breeds?: string[] | null
+          target_pet_types?: Database["public"]["Enums"]["pet_type"][] | null
+          target_radius_km?: number | null
+          updated_at?: string
+          user_id: string
+          video_url?: string | null
+          views_count?: number | null
+        }
+        Update: {
+          comments_count?: number | null
+          content?: string | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          image_urls?: string[] | null
+          is_archived?: boolean | null
+          is_sponsored?: boolean | null
+          likes_count?: number | null
+          location_lat?: number | null
+          location_lng?: number | null
+          location_name?: string | null
+          pet_id?: string | null
+          post_type?: Database["public"]["Enums"]["post_type"]
+          shares_count?: number | null
+          sponsor_budget?: number | null
+          target_breeds?: string[] | null
+          target_pet_types?: Database["public"]["Enums"]["pet_type"][] | null
+          target_radius_km?: number | null
+          updated_at?: string
+          user_id?: string
+          video_url?: string | null
+          views_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "posts_pet_id_fkey"
+            columns: ["pet_id"]
+            isOneToOne: false
+            referencedRelation: "pets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "posts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      users: {
+        Row: {
+          address: string | null
+          bio: string | null
+          business_category:
+            | Database["public"]["Enums"]["business_category"]
+            | null
+          created_at: string
+          email: string
+          followers_count: number | null
+          following_count: number | null
+          full_name: string | null
+          id: string
+          is_private: boolean | null
+          is_verified: boolean | null
+          location_lat: number | null
+          location_lng: number | null
+          phone: string | null
+          posts_count: number | null
+          profile_image_url: string | null
+          updated_at: string
+          user_type: Database["public"]["Enums"]["user_type"]
+          username: string
+          website_url: string | null
+        }
+        Insert: {
+          address?: string | null
+          bio?: string | null
+          business_category?:
+            | Database["public"]["Enums"]["business_category"]
+            | null
+          created_at?: string
+          email: string
+          followers_count?: number | null
+          following_count?: number | null
+          full_name?: string | null
+          id: string
+          is_private?: boolean | null
+          is_verified?: boolean | null
+          location_lat?: number | null
+          location_lng?: number | null
+          phone?: string | null
+          posts_count?: number | null
+          profile_image_url?: string | null
+          updated_at?: string
+          user_type?: Database["public"]["Enums"]["user_type"]
+          username: string
+          website_url?: string | null
+        }
+        Update: {
+          address?: string | null
+          bio?: string | null
+          business_category?:
+            | Database["public"]["Enums"]["business_category"]
+            | null
+          created_at?: string
+          email?: string
+          followers_count?: number | null
+          following_count?: number | null
+          full_name?: string | null
+          id?: string
+          is_private?: boolean | null
+          is_verified?: boolean | null
+          location_lat?: number | null
+          location_lng?: number | null
+          phone?: string | null
+          posts_count?: number | null
+          profile_image_url?: string | null
+          updated_at?: string
+          user_type?: Database["public"]["Enums"]["user_type"]
+          username?: string
+          website_url?: string | null
+        }
+        Relationships: []
+      }
+      vaccinations: {
+        Row: {
+          administered_date: string
+          batch_number: string | null
+          created_at: string
+          id: string
+          next_due_date: string | null
+          notes: string | null
+          pet_id: string
+          updated_at: string
+          vaccine_name: string
+          vaccine_type: string | null
+          vet_id: string | null
+        }
+        Insert: {
+          administered_date: string
+          batch_number?: string | null
+          created_at?: string
+          id?: string
+          next_due_date?: string | null
+          notes?: string | null
+          pet_id: string
+          updated_at?: string
+          vaccine_name: string
+          vaccine_type?: string | null
+          vet_id?: string | null
+        }
+        Update: {
+          administered_date?: string
+          batch_number?: string | null
+          created_at?: string
+          id?: string
+          next_due_date?: string | null
+          notes?: string | null
+          pet_id?: string
+          updated_at?: string
+          vaccine_name?: string
+          vaccine_type?: string | null
+          vet_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vaccinations_pet_id_fkey"
+            columns: ["pet_id"]
+            isOneToOne: false
+            referencedRelation: "pets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vaccinations_vet_id_fkey"
+            columns: ["vet_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +449,27 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      business_category:
+        | "vet"
+        | "pet_shop"
+        | "groomer"
+        | "trainer"
+        | "daycare"
+        | "photographer"
+        | "event_organizer"
+        | "other"
+      gender: "male" | "female" | "unknown"
+      pet_type:
+        | "dog"
+        | "cat"
+        | "bird"
+        | "fish"
+        | "rabbit"
+        | "hamster"
+        | "reptile"
+        | "other"
+      post_type: "post" | "story"
+      user_type: "normal" | "professional"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +596,30 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      business_category: [
+        "vet",
+        "pet_shop",
+        "groomer",
+        "trainer",
+        "daycare",
+        "photographer",
+        "event_organizer",
+        "other",
+      ],
+      gender: ["male", "female", "unknown"],
+      pet_type: [
+        "dog",
+        "cat",
+        "bird",
+        "fish",
+        "rabbit",
+        "hamster",
+        "reptile",
+        "other",
+      ],
+      post_type: ["post", "story"],
+      user_type: ["normal", "professional"],
+    },
   },
 } as const
