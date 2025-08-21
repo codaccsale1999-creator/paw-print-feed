@@ -6,16 +6,12 @@ import {
   TextField,
   Button,
   Typography,
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
   Alert,
-  Divider,
   Tab,
   Tabs,
+  Paper,
 } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import { Pets } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@/integrations/supabase/client';
@@ -74,7 +70,7 @@ const Auth: React.FC = () => {
         email: signUpForm.email,
         password: signUpForm.password,
         options: {
-          emailRedirectTo: `${window.location.origin}/`,
+          emailRedirectTo: `${window.location.origin}/verify-email?email=${signUpForm.email}`,
           data: {
             username: signUpForm.username,
             full_name: signUpForm.fullName,
@@ -89,7 +85,11 @@ const Auth: React.FC = () => {
         return;
       }
 
-      if (authData.user) {
+      if (authData.user && !authData.session) {
+        // User needs to verify email
+        navigate(`/verify-email?email=${signUpForm.email}`);
+      } else if (authData.user && authData.session) {
+        // User is already signed in (email confirmation disabled)
         // Create user profile
         const { error: profileError } = await supabase
           .from('users')
@@ -106,7 +106,7 @@ const Auth: React.FC = () => {
           console.error('Profile creation error:', profileError);
           setError('Account created but profile setup failed. Please try logging in.');
         } else {
-          // Navigate to setup pets page for normal users
+          // Navigate based on user type
           if (signUpForm.userType === 'normal') {
             navigate('/setup-pets');
           } else {
@@ -299,17 +299,55 @@ const Auth: React.FC = () => {
                   />
                   
                   {/* User Type Selection */}
-                  <FormControl sx={{ mb: 2 }}>
-                    <FormLabel>Account Type</FormLabel>
-                    <RadioGroup
-                      value={signUpForm.userType}
-                      onChange={(e) => setSignUpForm(prev => ({ ...prev, userType: e.target.value as 'normal' | 'professional' }))}
-                      row
-                    >
-                      <FormControlLabel value="normal" control={<Radio />} label="Pet Owner" />
-                      <FormControlLabel value="professional" control={<Radio />} label="Professional" />
-                    </RadioGroup>
-                  </FormControl>
+                  <Box sx={{ mb: 2 }}>
+                    <Typography variant="body2" sx={{ mb: 1, color: 'text.secondary' }}>
+                      Account Type
+                    </Typography>
+                    <Grid container spacing={1}>
+                      <Grid item xs={6}>
+                        <Paper
+                          sx={{
+                            p: 2,
+                            cursor: 'pointer',
+                            border: signUpForm.userType === 'normal' ? 2 : 1,
+                            borderColor: signUpForm.userType === 'normal' ? 'primary.main' : 'divider',
+                            '&:hover': { borderColor: 'primary.main' },
+                            textAlign: 'center',
+                          }}
+                          onClick={() => setSignUpForm(prev => ({ ...prev, userType: 'normal' }))}
+                        >
+                          <Typography variant="h4" sx={{ mb: 1 }}>🐾</Typography>
+                          <Typography variant="body2" fontWeight={600}>
+                            Pet Owner
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            Share your pets' moments
+                          </Typography>
+                        </Paper>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <Paper
+                          sx={{
+                            p: 2,
+                            cursor: 'pointer',
+                            border: signUpForm.userType === 'professional' ? 2 : 1,
+                            borderColor: signUpForm.userType === 'professional' ? 'primary.main' : 'divider',
+                            '&:hover': { borderColor: 'primary.main' },
+                            textAlign: 'center',
+                          }}
+                          onClick={() => setSignUpForm(prev => ({ ...prev, userType: 'professional' }))}
+                        >
+                          <Typography variant="h4" sx={{ mb: 1 }}>💼</Typography>
+                          <Typography variant="body2" fontWeight={600}>
+                            Professional
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            Vet, shop, services
+                          </Typography>
+                        </Paper>
+                      </Grid>
+                    </Grid>
+                  </Box>
 
                   {/* Business Category for Professional Users */}
                   {signUpForm.userType === 'professional' && (

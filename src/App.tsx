@@ -12,6 +12,11 @@ import AuthProvider from './components/auth/AuthProvider';
 import AppLayout from './components/layout/AppLayout';
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
+import VerifyEmail from "./pages/VerifyEmail";
+import SetupPets from "./pages/SetupPets";
+import CreatePost from "./pages/CreatePost";
+import Explore from "./pages/Explore";
+import Vaccinations from "./pages/Vaccinations";
 import NotFound from "./pages/NotFound";
 import { useSelector } from 'react-redux';
 import { RootState } from './store/store';
@@ -59,6 +64,11 @@ const AppRoutes = () => {
           </AuthRoute>
         } 
       />
+      <Route path="/verify-email" element={<VerifyEmail />} />
+      <Route path="/setup-pets" element={<ProtectedRoute><SetupPets /></ProtectedRoute>} />
+      <Route path="/create-post" element={<ProtectedRoute><AppLayout><CreatePost /></AppLayout></ProtectedRoute>} />
+      <Route path="/explore" element={<ProtectedRoute><AppLayout><Explore /></AppLayout></ProtectedRoute>} />
+      <Route path="/vaccinations" element={<ProtectedRoute><AppLayout><Vaccinations /></AppLayout></ProtectedRoute>} />
       <Route 
         path="/" 
         element={
